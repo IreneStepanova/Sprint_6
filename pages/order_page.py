@@ -1,7 +1,4 @@
-import time
-
 import allure
-from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from pages.base_page import BasePage
 from locators.order_page_locators import OrderPageLocators
@@ -19,19 +16,18 @@ class OrderPage(BasePage):
         self.send_text_to_element(OrderPageLocators.phone_field, phone)
         self.scroll_to_element(OrderPageLocators.next_button)
         self.click_on_element(OrderPageLocators.next_button)
-        time.sleep(2)
+        self.wait_for_visibility(OrderPageLocators.date_field)
 
     @allure.step("Выбрать станцию метро {station_name}")
     def click_on_metro_option(self, station_name):
-        locator = By.XPATH, f"//div[text()='{station_name}']"
+        locator = (OrderPageLocators.metro_option[0], OrderPageLocators.metro_option[1].format(station_name))
         self.click_on_element(locator)
 
     @allure.step("Заполнить вторую часть формы: дата {date}, срок {rental_period}, цвет {color}")
     def fill_second_form(self, date, rental_period, color, comment):
         self.send_text_to_element(OrderPageLocators.date_field, date)
-        time.sleep(0.5)
+        self.wait_for_attribute_contains(OrderPageLocators.date_field, "value", date)
         self.find_element_with_wait(OrderPageLocators.date_field).send_keys(Keys.ENTER)
-        time.sleep(0.5)
         self.click_on_element(OrderPageLocators.dropdown)
         self.select_rental_period(rental_period)
         self.select_color(color)
@@ -40,19 +36,17 @@ class OrderPage(BasePage):
 
     @allure.step("Выбрать срок аренды {period}")
     def select_rental_period(self, period):
-        locator = By.XPATH, f"//div[text()='{period}']"
+        locator = (OrderPageLocators.rental_period[0], OrderPageLocators.rental_period[1].format(period))
         self.click_on_element(locator)
 
     @allure.step("Выбрать цвет {color}")
     def select_color(self, color):
-        locator = By.XPATH, f".//label[contains(text(), '{color}')]"
+        locator = (OrderPageLocators.color_option[0], OrderPageLocators.color_option[1].format(color))
         self.click_on_element(locator)
 
     @allure.step("Отправить заказ")
     def submit_order(self):
-        locator = By.XPATH, "(//button[text()='Заказать'])[last()]"
-        self.click_on_element(locator)
-        time.sleep(1)
+        self.click_on_element(OrderPageLocators.submit_button)
 
     @allure.step("Подтвердить заказ в модальном окне")
     def confirm_order(self):

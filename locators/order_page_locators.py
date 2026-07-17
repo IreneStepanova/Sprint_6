@@ -13,3 +13,7 @@ class OrderPageLocators:
     comment_field = (By.XPATH, ".//input[contains(@placeholder, 'Комментарий')]")
     confirm_button = (By.XPATH, ".//button[text()='Да']")
     success_message = (By.XPATH, ".//div[contains(text(), 'Заказ оформлен')]")
+    metro_option = (By.XPATH, "//div[text()='{}']")
+    rental_period = (By.XPATH, "//div[text()='{}']")
+    color_option = (By.XPATH, ".//label[contains(text(), '{}')]")
+    submit_button = (By.XPATH, "(//button[text()='Заказать'])[last()]")
